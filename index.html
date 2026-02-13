@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Valentine?</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: pink;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+      width: 500px;
+      height: 320px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }
+
+    /* YES = HUGE */
+    #yes {
+      background: lightgreen;
+      font-size: 40px;
+      width: 260px;
+      height: 140px;
+    }
+
+    /* NO = tiny + movable */
+    #no {
+      background: lightcoral;
+      font-size: 16px;
+      width: 80px;
+      height: 40px;
+      position: absolute;
+      left: 330px;
+      top: 140px;
+    }
+
+    img {
+      width: 260px;
+      margin-top: 15px;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h1>Delia, will you be my Valentines?</h1>
+
+  <button id="yes">YES</button>
+  <button id="no">no</button>
+
+  <div id="result" class="hidden">
+    <h2 id="resultText"></h2>
+    <img id="resultImg">
+  </div>
+</div>
+
+<script>
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+  const result = document.getElementById("result");
+  const resultText = document.getElementById("resultText");
+  const resultImg = document.getElementById("resultImg");
+
+  const dangerRadius = 90;
+
+  document.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+
+    const dx = rect.left + rect.width/2 - e.clientX;
+    const dy = rect.top + rect.height/2 - e.clientY;
+    const dist = Math.hypot(dx, dy);
+
+    // Only run away MOST of the time → catchable
+    if (dist < dangerRadius && Math.random() < 0.75) {
+      noBtn.style.left = Math.random() * 380 + "px";
+      noBtn.style.top  = Math.random() * 200 + "px";
+    }
+  });
+
+  noBtn.onclick = () => {
+    result.classList.remove("hidden");
+    resultText.innerText = "Bold choice 😈";
+    resultImg.src = "No photo VD.jpg";
+  };
+
+  yesBtn.onclick = () => {
+    result.classList.remove("hidden");
+    resultText.innerText = "Correct answer 🎉❤️";
+    resultImg.src = "yes photo VD.jpg";
+    launchConfetti();
+  };
+
+  function launchConfetti() {
+    for (let i = 0; i < 60; i++) {
+      const piece = document.createElement("div");
+      piece.style.position = "fixed";
+      piece.style.left = Math.random() * 100 + "vw";
+      piece.style.top = "-10px";
+      piece.style.width = "8px";
+      piece.style.height = "12px";
+      piece.style.background = ["red","yellow","blue","green","purple"][Math.floor(Math.random()*5)];
+      piece.style.transition = "top 1.5s linear";
+      document.body.appendChild(piece);
+
+      setTimeout(() => piece.style.top = "110vh", 10);
+      setTimeout(() => piece.remove(), 1600);
+    }
+  }
+</script>
+
+</body>
+</html>
